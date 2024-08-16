@@ -4,36 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>인공지능 동물상 테스트</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>동물상 테스트</h1>
-    <h3>얼굴로 보는 인공지능 동물상 테스트</h3>
+    <div class="header">
+      <h1>동물상 테스트</h1>
+      <h3>얼굴로 보는 인공지능 동물상 테스트</h3>
+    </div>
     <!-- <button type="button" onclick="init()">webCam</button> -->
     <br />
-    <div id="upload-area">
-      <span> 👉 CLICK HERE! 👈 </span>
-      <br />
-      <span>사진을 올려놓거나 눌러서 업로드 해주세요!</span>
-      <input
-        id="upload-input"
-        style="display: none"
-        type="file"
-        accept="image/*"
-        onchange="readFile(this.files[0]);"
-      />
-    </div>
-    <div id="loading-area" style="display: none">
-      <span>~~~~</span>
-      <br />
-      <span>인공지능 모델을 불러오는 중입니다...</span>
-    </div>
-    <div id="result-area" style="display: none">
-      <img id="upload-image" src="#" alt="your_image" />
+    <div class="container">
+      <div id="upload-area" class="area">
+        <span class="guide-image"> 👉 CLICK HERE! 👈 </span>
+        <br />
+        <span>사진을 올려놓거나 눌러서 업로드 해주세요!</span>
+        <input
+          id="upload-input"
+          style="display: none"
+          type="file"
+          accept="image/*"
+          onchange="readFile(this.files[0]);"
+        />
+      </div>
+      <div id="loading-area" class="area" style="display: none">
+        <span class="guide-image">~~~~</span>
+        <br />
+        <span>인공지능 모델을 불러오는 중입니다...</span>
+      </div>
+      <div id="result-area" class="area" style="display: none">
+        <img id="upload-image" src="#" alt="your_image" />
+        <div id="label-container"></div>
+      </div>
       <div id="label-container"></div>
-    </div>
-    <div id="label-container"></div>
-    <div id="retry-area" style="display: none">
-      <span>다른 사진으로 테스트하려면 눌러주세요!</span>
+      <div id="retry-area" class="area" style="display: none">
+        <span>다른 사진으로 테스트하려면 눌러주세요!</span>
+      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
