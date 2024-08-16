@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>인공지능 동물상 테스트</title>
+  </head>
+  <body>
+    <div>인공지능 동물상 테스트</div>
+    <!-- <button type="button" onclick="init()">webCam</button> -->
+    <br />
+    <div id="upload_area">
+      <input type="file" accept="image/*" onchange="readFile(this.files[0]);" />
+    </div>
+    <div id="loading-area" style="display: none">
+      <span>~~~~</span>
+      <br />
+      <span>인공지능 모델을 불러오는 중입니다...</span>
+    </div>
+    <div id="result-area" style="display: none">
+      <img id="upload-image" src="#" alt="your_image" />
+      <div id="label-container"></div>
+    </div>
+    <div id="label-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+      const URL = "https://teachablemachine.withgoogle.com/models/URo2MtdBr/";
+      let model, webcam, labelContainer, maxPredictions;
+
+      let image = document.getElementById("upload-image");
+      let loadingArea = document.getElementById("loading-area");
+      let resultArea = document.getElementById("result-area");
+      const reader = new FileReader(); // 이미지파일을 데이터로 변환
+
+      async function readFile(file) {
+        loadingArea.style.display = "block";
+        //파일 변경될 때 마다 readFile
+        await init(); //await init() 끝난 후 코드를 실행하겠다
+        reader.readAsDataURL(file);
+      }
+      reader.onload = async function (event) {
+        await image.setAttribute("src", event.target.result);
+        await predict();
+        loadingArea.style.display = "none";
+        resultArea.style.display = "block";
+      };
+
+      async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) {
+          // and class labels
+          labelContainer.appendChild(document.createElement("div"));
+        }
+      }
+      async function predict() {
+        const prediction = await model.predict(image);
+        for (let i = 0; i < maxPredictions; i++) {
+          const classPrediction =
+            prediction[i].className +
+            ": " +
+            prediction[i].probability.toFixed(2);
+          labelContainer.childNodes[i].innerHTML = classPrediction;
+        }
+      }
+    </script>
+  </body>
+</html>
+
+
+
