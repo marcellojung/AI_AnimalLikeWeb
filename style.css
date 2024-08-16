@@ -67,3 +67,14 @@ h3 {
   width: 55%;
   max-width: 540px;
 }
+
+#disqus_thread {
+  background-color: #f6f7fa;
+  max-width: 650px;
+  box-sizing: border-box;
+  padding: 25px;
+  margin: 0 auto;
+  margin-top: 15px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+}
