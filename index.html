@@ -10,8 +10,17 @@
     <h3>얼굴로 보는 인공지능 동물상 테스트</h3>
     <!-- <button type="button" onclick="init()">webCam</button> -->
     <br />
-    <div id="upload_area">
-      <input type="file" accept="image/*" onchange="readFile(this.files[0]);" />
+    <div id="upload-area">
+      <span> 👉 CLICK HERE! 👈 </span>
+      <br />
+      <span>사진을 올려놓거나 눌러서 업로드 해주세요!</span>
+      <input
+        id="upload-input"
+        style="display: none"
+        type="file"
+        accept="image/*"
+        onchange="readFile(this.files[0]);"
+      />
     </div>
     <div id="loading-area" style="display: none">
       <span>~~~~</span>
@@ -29,7 +38,9 @@
       const URL = "https://teachablemachine.withgoogle.com/models/URo2MtdBr/";
       let model, webcam, labelContainer, maxPredictions;
       let isModelReady = false;
+      let input = document.getElementById("upload-input");
       let image = document.getElementById("upload-image");
+      let uploadArea = document.getElementById("upload-area");
       let loadingArea = document.getElementById("loading-area");
       let resultArea = document.getElementById("result-area");
       const reader = new FileReader(); // 이미지파일을 데이터로 변환
@@ -48,7 +59,16 @@
         loadingArea.style.display = "none";
         resultArea.style.display = "block";
       };
-
+      uploadArea.onclick = function () {
+        input.click();
+      };
+      uploadArea.ondragover = function (e) {
+        e.preventDefault();
+      };
+      uploadArea.ondrop = function (e) {
+        e.preventDefault();
+        readFile(e.dataTransfer.files[0]);
+      };
       async function init() {
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
