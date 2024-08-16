@@ -32,6 +32,9 @@
       <div id="label-container"></div>
     </div>
     <div id="label-container"></div>
+    <div id="retry-area" style="display: none">
+      <span>다른 사진으로 테스트하려면 눌러주세요!</span>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
@@ -43,9 +46,11 @@
       let uploadArea = document.getElementById("upload-area");
       let loadingArea = document.getElementById("loading-area");
       let resultArea = document.getElementById("result-area");
+      let retryArea = document.getElementById("retry-area");
       const reader = new FileReader(); // 이미지파일을 데이터로 변환
 
       async function readFile(file) {
+        uploadArea.style.display = "none";
         if (!isModelReady) {
           loadingArea.style.display = "block";
           //파일 변경될 때 마다 readFile
@@ -58,6 +63,7 @@
         await predict();
         loadingArea.style.display = "none";
         resultArea.style.display = "block";
+        retryArea.style.display = "block";
       };
       uploadArea.onclick = function () {
         input.click();
@@ -68,6 +74,12 @@
       uploadArea.ondrop = function (e) {
         e.preventDefault();
         readFile(e.dataTransfer.files[0]);
+      };
+      retryArea.onclick = function () {
+        input.value = "";
+        resultArea.style.display = "none";
+        retryArea.style.display = "none";
+        uploadArea.style.display = "block";
       };
       async function init() {
         const modelURL = URL + "model.json";
