@@ -6,7 +6,8 @@
     <title>인공지능 동물상 테스트</title>
   </head>
   <body>
-    <div>인공지능 동물상 테스트</div>
+    <h1>동물상 테스트</h1>
+    <h3>얼굴로 보는 인공지능 동물상 테스트</h3>
     <!-- <button type="button" onclick="init()">webCam</button> -->
     <br />
     <div id="upload_area">
@@ -27,16 +28,18 @@
     <script type="text/javascript">
       const URL = "https://teachablemachine.withgoogle.com/models/URo2MtdBr/";
       let model, webcam, labelContainer, maxPredictions;
-
+      let isModelReady = false;
       let image = document.getElementById("upload-image");
       let loadingArea = document.getElementById("loading-area");
       let resultArea = document.getElementById("result-area");
       const reader = new FileReader(); // 이미지파일을 데이터로 변환
 
       async function readFile(file) {
-        loadingArea.style.display = "block";
-        //파일 변경될 때 마다 readFile
-        await init(); //await init() 끝난 후 코드를 실행하겠다
+        if (!isModelReady) {
+          loadingArea.style.display = "block";
+          //파일 변경될 때 마다 readFile
+          await init(); //await init() 끝난 후 코드를 실행하겠다
+        }
         reader.readAsDataURL(file);
       }
       reader.onload = async function (event) {
@@ -54,24 +57,57 @@
         maxPredictions = model.getTotalClasses();
 
         labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) {
-          // and class labels
+        for (let i = 0; i < maxPredictions + 1; i++) {
           labelContainer.appendChild(document.createElement("div"));
         }
       }
       async function predict() {
         const prediction = await model.predict(image);
+        console.log(prediction);
+        prediction.sort((a, b) => b.probability - a.probability);
+        switch (prediction[0].className) {
+          case "강아지":
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 강아지상입니다.</h3>";
+            break;
+          case "고양이":
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 고양이상입니다.</h3>";
+            break;
+          case "토끼":
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 토끼상입니다.</h3>";
+            break;
+          case "말":
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 말상입니다.</h3>";
+            break;
+          case "쥐":
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 쥐상입니다.</h3>";
+            break;
+          case "뱀":
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 뱀상입니다.</h3>";
+            break;
+          case "여우":
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 여우상입니다.</h3>";
+            break;
+          default:
+            labelContainer.childNodes[0].innerHTML =
+              "<h3>당신은 동물상이 아닙니다.</h3>";
+        }
         for (let i = 0; i < maxPredictions; i++) {
           const classPrediction =
             prediction[i].className +
             ": " +
-            prediction[i].probability.toFixed(2);
-          labelContainer.childNodes[i].innerHTML = classPrediction;
+            Math.round(100 * prediction[i].probability) +
+            "%";
+          labelContainer.childNodes[i + 1].innerHTML = classPrediction;
         }
+        isModelReady = true;
       }
     </script>
   </body>
 </html>
-
-
-
